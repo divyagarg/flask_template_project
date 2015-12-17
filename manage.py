@@ -1,7 +1,12 @@
+# Always keep the monkeypatching above anything.
+# Otherwise any library before it will use unpatched sockets and threads
+import gevent.monkey
+gevent.monkey.patch_all()
+
+from apps import create_app
 import os
 import sys
 import newrelic.agent
-from apps import create_app
 from flask_script import Manager
 from flask_script import Server
 import config
@@ -9,9 +14,9 @@ import config
 # "staging" for Staging
 # "production" for Production
 env = os.environ.get('HOSTENV') or 'development'
-newrelic_cfg_file = os.path.join(os.getcwd(), "conf", "newapp-newrelic-%s.ini" % env)
 
 if env == "production":
+  newrelic_cfg_file = os.path.join(os.getcwd(), "conf", "newapp-newrelic-%s.ini" % env)
   newrelic.agent.initialize(newrelic_cfg_file)
 
 app = create_app()

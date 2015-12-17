@@ -1,6 +1,3 @@
-import gevent.monkey
-gevent.monkey.patch_all()
-
 from flask import Flask
 import lib.log as log
 
